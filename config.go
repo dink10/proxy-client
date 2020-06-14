@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// Config provides setting config for client proxy
+// Config provides settings for client proxy
 type Config struct {
 	ProxyURL         string
 	MaxConn          int

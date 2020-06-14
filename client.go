@@ -19,7 +19,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Client is used to implement http client
+// Client is used to implement http proxy client
 type Client struct {
 	*http.Client
 	cfg     Config
@@ -38,12 +38,14 @@ type proxy struct {
 	Type int    `json:"type"`
 }
 
+// Options provides request options
 type Options struct {
 	Headers map[string]string
 	Params  map[string]string
 	Data    []byte
 }
 
+// NewClient provides new proxy client
 func NewClient(cfg Config, logger logger) *Client {
 
 	populateConfig(&cfg)
@@ -216,6 +218,7 @@ func (c *Client) request(url, method string, opts Options) (*http.Request, error
 	return req, nil
 }
 
+// Stop stops cron job
 func (c *Client) Stop() {
 	gocron.Clear()
 }
