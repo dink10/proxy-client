@@ -16,7 +16,6 @@ import (
 	"github.com/Pallinder/go-randomdata"
 	"github.com/jasonlvhit/gocron"
 	"github.com/motemen/go-loghttp"
-	"github.com/sirupsen/logrus"
 )
 
 // Client is used to implement http proxy client
@@ -47,6 +46,10 @@ type Options struct {
 
 // NewClient provides new proxy client
 func NewClient(cfg Config, logger logger) *Client {
+
+	if logger == nil {
+		logger = NewLogger()
+	}
 
 	populateConfig(&cfg)
 
@@ -99,11 +102,11 @@ func (c *Client) runRefresher() error {
 func (c *Client) refreshProxies() {
 	res, err := c.DoRequest(c.cfg.ProxyURL, "GET", Options{})
 	if err != nil {
-		logrus.Error(err)
+		c.logger.Error(err)
 	}
 	var proxies []proxy
 	if err := json.Unmarshal(res, &proxies); err != nil {
-		logrus.Error(err)
+		c.logger.Error(err)
 	}
 
 	c.mu.Lock()
@@ -150,7 +153,7 @@ func (c *Client) DoRequest(requestURL, method string, opts Options) ([]byte, err
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			logrus.Error(err)
+			c.logger.Error(err)
 		}
 	}()
 
