@@ -172,7 +172,6 @@ func (c *Client) proxyURL() (*url.URL, error) {
 	var u string
 	attempt := 0
 	c.mu.Lock()
-	defer c.mu.Unlock()
 	for {
 		if attempt >= 30 {
 			break
@@ -185,6 +184,7 @@ func (c *Client) proxyURL() (*url.URL, error) {
 			break
 		}
 	}
+	c.mu.Unlock()
 
 	proxyURL, err := url.Parse(u)
 	if err != nil {
