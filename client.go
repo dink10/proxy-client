@@ -179,7 +179,7 @@ func (c *Client) proxyURL() (*url.URL, error) {
 		attempt++
 		rand.Seed(time.Now().Unix())
 		n := rand.Int()
-		if len(c.proxies) != 0 {
+		if len(c.proxies) > 0 {
 			n %= len(c.proxies)
 		}
 		if c.proxies[n].Type == 0 {
