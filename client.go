@@ -178,10 +178,10 @@ func (c *Client) proxyURL() (*url.URL, error) {
 		}
 		attempt++
 		rand.Seed(time.Now().Unix())
-		n := rand.Int()
-		if len(c.proxies) > 0 {
-			n %= len(c.proxies)
+		if len(c.proxies) == 0 {
+			return nil, fmt.Errorf("empty proxy list")
 		}
+		n := rand.Int() % len(c.proxies)
 		if c.proxies[n].Type == 0 {
 			u = "http://" + c.proxies[n].Host + ":" + strconv.Itoa(c.proxies[n].Port)
 			break
